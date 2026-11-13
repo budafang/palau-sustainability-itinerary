@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#006D77" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="青年百億海外圓夢基金計畫 N-10-3 帛琉南島永續實踐計畫 每日行程手冊" />
+  <title>帛琉南島永續實踐計畫｜行程手冊</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23006D77'/%3E%3Cpath d='M14 38c6-5 12-5 18 0s12 5 18 0' fill='none' stroke='%2383C5BE' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M18 47c5-4 9-4 14 0s9 4 14 0' fill='none' stroke='%23EDF6F9' stroke-width='3.5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='22' r='7' fill='%23FFDDD2'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- 頂部導覽與摘要 -->
+    <header class="app-header">
+      <div class="header-top">
+        <div>
+          <span class="badge-program">N-10-3 海外翱翔組</span>
+          <h1 class="app-title">帛琉南島永續實踐計畫</h1>
+          <p class="app-subtitle">116/07/29 – 08/12（共 15 日）</p>
+        </div>
+        <button id="btn-today" class="btn-pill" type="button" title="跳至重點日期">
+          <span class="dot-live"></span>
+          <span id="btn-today-label">Day 1</span>
+        </button>
+      </div>
+
+      <!-- 搜尋與篩選列（僅在每日行程頁顯示） -->
+      <div id="itinerary-controls" class="controls-bar">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="search-input" type="search" placeholder="搜尋地點、主題、SDG..." autocomplete="off" />
+          <button id="clear-search" class="clear-btn hidden" type="button" aria-label="清除搜尋">✕</button>
+        </div>
+        <div id="sdg-filter-row" class="chip-scroll" aria-label="SDG 篩選"></div>
+        <div id="day-jump-row" class="day-jump-scroll" aria-label="快速跳轉日期"></div>
+      </div>
+    </header>
+
+    <!-- 主內容區 -->
+    <main class="app-main">
+      <!-- 分頁 1：每日行程 -->
+      <section id="tab-itinerary" class="tab-panel active" aria-labelledby="nav-itinerary">
+        <div class="progress-banner" id="progress-banner">
+          <div class="progress-info">
+            <span class="progress-label">行程完成進度</span>
+            <span class="progress-count" id="progress-count">0 / 15 天</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+          </div>
+          <div class="expense-summary-bar" id="expense-summary-bar">
+            <span class="expense-summary-label">累積花費</span>
+            <span class="expense-summary-values" id="expense-summary-values">USD $0.00 ｜ TWD $0</span>
+          </div>
+        </div>
+
+        <div id="itinerary-list" class="card-list"></div>
+        <div id="empty-state" class="empty-state hidden">
+          <p>找不到符合條件的行程</p>
+          <button id="reset-filters" class="btn-secondary" type="button">重設篩選條件</button>
+        </div>
+      </section>
+
+      <!-- 分頁 2：行前培訓 -->
+      <section id="tab-training" class="tab-panel" aria-labelledby="nav-training">
+        <div class="info-banner warning-banner">
+          <strong>行前培訓（必參加）</strong>
+          <p>116 年 7 月 14 日（三）08:00–17:30｜銘傳大學基河校區 J616 會議室</p>
+          <p class="small-note">※ 若無法參加視同放棄錄取資格</p>
+        </div>
+        <div id="training-list" class="timeline-list"></div>
+      </section>
+
+      <!-- 分頁 3：見習機構 -->
+      <section id="tab-orgs" class="tab-panel" aria-labelledby="nav-orgs">
+        <div class="section-intro">
+          <h2>合作與見習機構（共 8 個）</h2>
+          <p>點擊連結可開啟各機構官方頁面。</p>
+        </div>
+        <div id="orgs-list" class="card-list"></div>
+      </section>
+
+      <!-- 分頁 4：行前須知與計畫資訊 -->
+      <section id="tab-info" class="tab-panel" aria-labelledby="nav-info">
+        <div id="info-content" class="info-stack"></div>
+      </section>
+    </main>
+
+    <!-- 底部 App 導覽列 -->
+    <nav class="bottom-nav" aria-label="主導覽">
+      <button id="nav-itinerary" class="nav-item active" data-tab="itinerary" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>每日行程</span>
+      </button>
+      <button id="nav-training" class="nav-item" data-tab="training" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>行前培訓</span>
+      </button>
+      <button id="nav-orgs" class="nav-item" data-tab="orgs" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <span>見習機構</span>
+      </button>
+      <button id="nav-info" class="nav-item" data-tab="info" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16v-4M12 8h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>計畫須知</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
